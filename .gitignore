@@ -1,0 +1,12 @@
+# Cloudflare & Wrangler state
+.wrangler/
+.dev.vars
+
+# Dependencies
+node_modules/
+package-lock.json
+
+# OS & IDE
+.DS_Store
+Thumbs.db
+*.log

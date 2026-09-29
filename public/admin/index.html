@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Admin Portal — Chitwan Wood Craft</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="/admin/admin.css">
+</head>
+<body class="admin-body">
+
+  <!-- ================= ADMIN HEADER ================= -->
+  <header class="admin-header wood">
+    <div class="admin-header-inner">
+      <div class="admin-brand">
+        <a class="brand brand-light" href="/admin/">
+          <span class="brand-mark-logo">
+            <img src="/logo.jpg" alt="Chitwan Wood Craft">
+          </span>
+          <span class="brand-text">
+            <strong>Chitwan Wood Craft</strong>
+            <small>Product Management Portal</small>
+          </span>
+        </a>
+      </div>
+
+      <div class="admin-user-nav">
+        <div class="user-pill" id="user-pill">
+          <span class="status-dot"></span>
+          <span id="user-email">Checking access…</span>
+        </div>
+        <a href="/" target="_blank" class="btn btn-ghost btn-sm" title="View live website in a new tab">
+          View Public Site ↗
+        </a>
+        <button class="btn btn-primary btn-sm" id="btn-create-product">
+          + Add New Product
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ================= MAIN ADMIN CONTAINER ================= -->
+  <main class="admin-container">
+    
+    <!-- STATS CARDS -->
+    <section class="admin-stats-grid">
+      <div class="admin-stat-card">
+        <span class="stat-label">Total Products</span>
+        <strong class="stat-value" id="stat-total">0</strong>
+      </div>
+      <div class="admin-stat-card">
+        <span class="stat-label">Published</span>
+        <strong class="stat-value text-success" id="stat-published">0</strong>
+      </div>
+      <div class="admin-stat-card">
+        <span class="stat-label">Drafts</span>
+        <strong class="stat-value text-muted" id="stat-drafts">0</strong>
+      </div>
+      <div class="admin-stat-card">
+        <span class="stat-label">Signature / Featured</span>
+        <strong class="stat-value text-amber" id="stat-featured">0</strong>
+      </div>
+    </section>
+
+    <!-- TOOLBAR & FILTERS -->
+    <section class="admin-card">
+      <div class="admin-toolbar">
+        <div class="search-box">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/>
+          </svg>
+          <input type="search" id="admin-search" placeholder="Search by name, wood, finish or catalogue…">
+        </div>
+
+        <div class="filter-group">
+          <select id="filter-category" aria-label="Filter by catalogue">
+            <option value="all">All Catalogues</option>
+          </select>
+
+          <select id="filter-status" aria-label="Filter by status">
+            <option value="all">All Statuses</option>
+            <option value="published">Published</option>
+            <option value="draft">Draft</option>
+          </select>
+
+          <button class="btn btn-ghost btn-sm" id="btn-refresh" title="Reload products">
+            ↻ Refresh
+          </button>
+        </div>
+      </div>
+
+      <!-- PRODUCTS TABLE -->
+      <div class="table-responsive">
+        <table class="admin-table" id="products-table">
+          <thead>
+            <tr>
+              <th style="width: 70px;">Image</th>
+              <th>Product Name</th>
+              <th>Catalogue</th>
+              <th>Wood &amp; Finish</th>
+              <th>Dimensions</th>
+              <th>Price (NPR)</th>
+              <th>Status</th>
+              <th>Featured</th>
+              <th style="text-align: right; width: 140px;">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="products-tbody">
+            <tr>
+              <td colspan="9" class="table-loading">Loading products from database…</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <!-- ================= PRODUCT EDITOR MODAL / DRAWER ================= -->
+  <div class="modal-backdrop" id="editor-modal" role="dialog" aria-modal="true">
+    <div class="admin-editor-card wood">
+      <div class="editor-header">
+        <div>
+          <span class="eyebrow" id="editor-eyebrow">Product Management</span>
+          <h3 id="editor-title">Add New Product</h3>
+        </div>
+        <button class="modal-close" id="editor-close" aria-label="Close">✕</button>
+      </div>
+
+      <form id="product-form" class="editor-form">
+        <input type="hidden" id="prod-id">
+
+        <!-- Form Rows Grid -->
+        <div class="form-grid">
+          
+          <!-- Product Name -->
+          <div class="field full-width">
+            <label for="prod-name">Product Name *</label>
+            <input type="text" id="prod-name" required placeholder="e.g. Chitwan Coffee Table">
+          </div>
+
+          <!-- Category -->
+          <div class="field">
+            <label for="prod-category">Catalogue / Category *</label>
+            <select id="prod-category" required>
+              <!-- Populated dynamically -->
+            </select>
+          </div>
+
+          <!-- Slug -->
+          <div class="field">
+            <label for="prod-slug">URL Slug (Auto-generated if blank)</label>
+            <input type="text" id="prod-slug" placeholder="e.g. chitwan-coffee-table">
+          </div>
+
+          <!-- Wood Type -->
+          <div class="field">
+            <label for="prod-wood">Wood Type *</label>
+            <input type="text" id="prod-wood" required placeholder="e.g. Sal, Teak, Sisau, Pine">
+          </div>
+
+          <!-- Finish -->
+          <div class="field">
+            <label for="prod-finish">Finish *</label>
+            <input type="text" id="prod-finish" required placeholder="e.g. Natural oil, Matte lacquer, Honey wax">
+          </div>
+
+          <!-- Dimensions -->
+          <div class="field">
+            <label for="prod-dims">Dimensions *</label>
+            <input type="text" id="prod-dims" required placeholder="e.g. 120 × 60 × 45 cm">
+          </div>
+
+          <!-- Price -->
+          <div class="field">
+            <label for="prod-price">Price (NPR) *</label>
+            <input type="number" id="prod-price" required min="0" step="100" placeholder="32000">
+          </div>
+
+          <!-- Price Note / Unit -->
+          <div class="field">
+            <label for="prod-unit">Price Note / Unit (Optional)</label>
+            <input type="text" id="prod-unit" placeholder="e.g. / running ft or Ex-works Bharatpur">
+          </div>
+
+          <!-- Tag / Badge -->
+          <div class="field">
+            <label for="prod-tag">Tag / Badge (Optional)</label>
+            <select id="prod-tag">
+              <option value="">None</option>
+              <option value="Bestseller">Bestseller</option>
+              <option value="Signature">Signature</option>
+              <option value="New">New</option>
+              <option value="Custom">Custom</option>
+            </select>
+          </div>
+
+          <!-- Status & Featured -->
+          <div class="field">
+            <label for="prod-status">Status</label>
+            <select id="prod-status">
+              <option value="published">Published</option>
+              <option value="draft">Draft (Hidden from public)</option>
+            </select>
+          </div>
+
+          <div class="field checkbox-field">
+            <label class="toggle-container">
+              <input type="checkbox" id="prod-featured">
+              <span class="toggle-slider"></span>
+              <span class="toggle-label">Feature on Homepage (Signature pieces)</span>
+            </label>
+          </div>
+
+          <!-- Short Description -->
+          <div class="field full-width">
+            <label for="prod-short-desc">Short Description</label>
+            <input type="text" id="prod-short-desc" placeholder="Brief 1-2 sentence teaser for catalog cards…">
+          </div>
+
+          <!-- Full Description -->
+          <div class="field full-width">
+            <label for="prod-full-desc">Full Craftsmanship Description</label>
+            <textarea id="prod-full-desc" rows="4" placeholder="Detailed story, joinery methods, timber provenance, and maintenance instructions…"></textarea>
+          </div>
+
+          <!-- IMAGE UPLOADER -->
+          <div class="field full-width">
+            <label>Product Images (Upload to Cloudflare R2)</label>
+            
+            <div class="dropzone" id="image-dropzone">
+              <input type="file" id="file-input" multiple accept="image/jpeg,image/png,image/webp,image/avif" style="display:none;">
+              <div class="dropzone-inner">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" class="upload-icon">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>
+                </svg>
+                <p><strong>Click to browse</strong> or drag &amp; drop product photos</p>
+                <small>Supports JPEG, PNG, WebP, AVIF up to 5MB each</small>
+              </div>
+            </div>
+
+            <!-- Upload progress / Image preview list -->
+            <div class="image-gallery-preview" id="image-gallery-preview"></div>
+          </div>
+
+        </div>
+
+        <!-- Form Actions -->
+        <div class="editor-actions">
+          <button type="button" class="btn btn-ghost" id="btn-cancel">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="btn-save">Save Product</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ================= DELETE CONFIRMATION MODAL ================= -->
+  <div class="modal-backdrop" id="delete-modal" role="dialog" aria-modal="true">
+    <div class="admin-confirm-card wood">
+      <h3>Delete Product?</h3>
+      <p id="delete-message">Are you sure you want to permanently delete this product? This action cannot be undone.</p>
+      <div class="confirm-actions">
+        <button class="btn btn-ghost btn-sm" id="btn-cancel-delete">Cancel</button>
+        <button class="btn btn-primary btn-sm btn-danger" id="btn-confirm-delete">Delete Permanently</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="/admin/admin.js"></script>
+</body>
+</html>

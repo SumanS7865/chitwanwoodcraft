@@ -1,0 +1,37 @@
+name = "chitwanwoodcraft"
+main = "worker/index.js"
+compatibility_date = "2024-09-23"
+compatibility_flags = ["nodejs_compat"]
+
+# Static Assets configuration to serve public frontend files
+[assets]
+directory = "public"
+binding = "ASSETS"
+
+# Cloudflare D1 Serverless SQL Database
+[[d1_databases]]
+binding = "DB"
+database_name = "chitwanwoodcraft-db"
+database_id = "local-d1-placeholder"
+
+# Cloudflare R2 Object Storage for Product Media
+[[r2_buckets]]
+binding = "BUCKET"
+bucket_name = "chitwanwoodcraft-images"
+preview_bucket_name = "chitwanwoodcraft-images-preview"
+
+# Environment variables
+[vars]
+ENVIRONMENT = "development"
+# Set these in production via `wrangler secret put` or Cloudflare Zero Trust settings:
+# CF_ACCESS_TEAM_DOMAIN = "chitwanwoodcraft"
+# CF_ACCESS_AUD = "your-cf-access-application-aud-tag"
+
+# Cloudflare Workers Native Rate Limiting Binding (5 requests per 60 seconds per IP)
+[[ratelimits]]
+name = "CONTACT_RATE_LIMITER"
+namespace_id = "1001"
+
+[ratelimits.simple]
+limit = 5
+period = 60
